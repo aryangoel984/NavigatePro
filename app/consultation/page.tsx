@@ -1,3 +1,5 @@
+"use client"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -98,6 +100,41 @@ function VideoConsultation() {
 }
 
 function ChatConsultation() {
+  const [messages, setMessages] = useState([
+    { sender: "ai", message: "Hello! I'm your AI career advisor. I'm here to help you explore tech career options and find the right path for you. What are you most interested in learning about?" },
+  ])
+  const [input, setInput] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  const sendMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    if (!input.trim()) return
+    setError("")
+    const userMessage = { sender: "user", message: input }
+    setMessages((prev) => [...prev, userMessage])
+    setInput("")
+    setLoading(true)
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
+      })
+      if (!res.ok) throw new Error("Failed to get response from AI")
+      const data = await res.json()
+      setMessages((prev) => [...prev, { sender: "ai", message: data.reply }])
+    } catch (err: any) {
+      setError(err.message || "Something went wrong")
+    } finally {
+      setLoading(false)
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" })
+      }, 100)
+    }
+  }
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -106,51 +143,41 @@ function ChatConsultation() {
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[400px] pr-4">
-          <div className="space-y-4">
-            <ChatMessage
-              sender="ai"
-              message="Hello! I'm your AI career advisor. I'm here to help you explore tech career options and find the right path for you. What are you most interested in learning about?"
-            />
-            <ChatMessage
-              sender="user"
-              message="I'm interested in becoming a developer, but I'm not sure if I should focus on frontend or backend."
-            />
-            <ChatMessage
-              sender="ai"
-              message="That's a great question! Both frontend and backend development offer rewarding career paths. Let me ask you a few questions to help you decide which might be a better fit for you."
-            />
-            <ChatMessage
-              sender="ai"
-              message="Do you enjoy working on visual elements and user interfaces, or do you prefer working with data, logic, and systems behind the scenes?"
-            />
-            <ChatMessage
-              sender="user"
-              message="I think I enjoy the visual aspects more. I like seeing immediate results of my work."
-            />
-            <ChatMessage
-              sender="ai"
-              message="Based on your preference for visual work and immediate feedback, frontend development might be a good fit for you! Frontend developers create the user interfaces that people interact with, using technologies like HTML, CSS, JavaScript, and frameworks like React or Vue."
-            />
-            <ChatMessage
-              sender="ai"
-              message="Would you like me to provide more information about frontend development career paths, or would you like to explore some learning resources to get started?"
-            />
+          <div className="space-y-4" ref={scrollRef}>
+            {messages.map((msg, i) => (
+              <ChatMessage key={i} sender={msg.sender} message={msg.message} />
+            ))}
+            {loading && <ChatMessage sender="ai" message="Thinking..." />}
           </div>
         </ScrollArea>
+        {error && <div className="text-red-600 text-sm text-center mt-2">{error}</div>}
       </CardContent>
       <CardFooter>
-        <div className="flex w-full items-center space-x-2">
-          <Input placeholder="Type your message..." />
-          <Button size="icon">
+        <form className="flex w-full items-center space-x-2" onSubmit={sendMessage}>
+          <Input
+            placeholder="Type your message..."
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            disabled={loading}
+            onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) sendMessage(e) }}
+            autoFocus
+          />
+          <Button size="icon" type="submit" disabled={loading || !input.trim()}>
             <Send className="h-4 w-4" />
           </Button>
-        </div>
+        </form>
       </CardFooter>
     </Card>
   )
 }
 
-function ChatMessage({ sender, message }) {
+// Add type for ChatMessage props
+interface ChatMessageProps {
+  sender: string;
+  message: string;
+}
+
+function ChatMessage({ sender, message }: ChatMessageProps) {
   return (
     <div className={`flex ${sender === "user" ? "justify-end" : "justify-start"}`}>
       <div className={`flex gap-3 max-w-[80%] ${sender === "user" ? "flex-row-reverse" : ""}`}>

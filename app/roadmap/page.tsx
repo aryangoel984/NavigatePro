@@ -11,7 +11,10 @@ export default function RoadmapPage() {
     <div className="container mx-auto py-6 space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Learning Roadmap</h1>
-        <p className="text-muted-foreground">Your personalized path to becoming a Frontend Developer</p>
+        {/* <Tabs defaultValue="frontend" className="w-full">
+           
+        </Tabs> */}
+        
       </div>
 
       <Tabs defaultValue="frontend" className="w-full">
@@ -20,6 +23,15 @@ export default function RoadmapPage() {
           <TabsTrigger value="data">Data Scientist</TabsTrigger>
           <TabsTrigger value="fullstack">Full Stack Developer</TabsTrigger>
         </TabsList>
+        <TabsContent value="frontend">
+            <p className="text-muted-foreground">Your personalized path to becoming a Frontend Developer</p>
+            </TabsContent>
+            <TabsContent value="data">
+            <p className="text-muted-foreground">Your personalized path to becoming a Data Scientist</p>
+            </TabsContent>
+            <TabsContent value="fullstack">
+            <p className="text-muted-foreground">Your personalized path to becoming a Full Stack Developer</p>
+            </TabsContent>
 
         <TabsContent value="frontend" className="mt-6 space-y-6">
           <div className="flex justify-between items-center">
@@ -147,32 +159,256 @@ export default function RoadmapPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="data" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Data Scientist Roadmap</CardTitle>
-              <CardDescription>Switch to this path to view the detailed roadmap</CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center py-8">
-              <Button asChild>
-                <Link href="/consultation">Get Personalized Data Science Roadmap</Link>
-              </Button>
-            </CardContent>
-          </Card>
+        <TabsContent value="data" className="mt-6 space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold">Data Scientist Roadmap</h2>
+              <p className="text-muted-foreground">Estimated completion time: 6-8 months</p>
+            </div>
+            <Button>
+              <Download className="mr-2 h-4 w-4" />
+              Download Roadmap
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-6">
+              <RoadmapStage
+                title="Stage 1: Data Science Fundamentals"
+                description="Conquer the basics of data science"
+                progress={75}
+                status="completed"
+                modules={[
+                  { name: "Python for Data Science", status: "completed" },
+                  { name: "Data Analysis with Pandas", status: "completed" },
+                  { name: "Data Visualization with Matplotlib", status: "in-progress" },
+                  { name: "Machine Learning Fundamentals", status: "completed" },
+                ]}
+              />
+
+              <RoadmapStage
+                title="Stage 2: Data Analysis"
+                description="Master the art of data analysis"
+                progress={65}
+                status="in-progress"
+                modules={[
+                  { name: "Data Analysis with Pandas", status: "completed" },
+                  { name: "Data Visualization with Matplotlib", status: "in-progress" },
+                  { name: "Machine Learning Fundamentals", status: "completed" },
+                  { name: "Data Wrangling with Pandas", status: "not-started" },
+                ]}
+              />
+
+              <RoadmapStage
+                title="Stage 3: Data Wrangling"
+                description="Master advanced concepts and tools"
+                progress={25}
+                status="not-started"
+                modules={[
+                  { name: "Data Analysis with Pandas", status: "completed" },
+                  { name: "Testing with Jest & React Testing Library", status: "not-started" },
+                  { name: "Data Wrangling with Pandas", status: "not-started" },
+                  { name: "Data Visualization with Matplotlib", status: "in-progress" },
+                ]}
+              />
+
+              <RoadmapStage
+                title="Stage 4: Data Visualization"
+                description="Prepare for the job market"
+                progress={0}
+                status="not-started"
+                modules={[  
+                  { name: "Data Analysis with Pandas", status: "completed" },
+                  { name: "Data Visualization with Matplotlib", status: "in-progress" },
+                  { name: "Machine Learning Fundamentals", status: "completed" },
+                  { name: "Data Wrangling with Pandas", status: "not-started" },
+                ]}
+              />
+            </div>
+
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Your Progress</CardTitle>
+                  <CardDescription>Frontend Developer Path</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">Overall Completion</span>
+                        <span className="text-sm text-muted-foreground">41%</span>
+                      </div>
+                      <Progress value={41} className="h-2" />
+                    </div>
+
+                    <div className="pt-4 space-y-2">
+                      <h4 className="font-medium">Statistics</h4>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Modules Completed:</span>
+                          <span>6/16</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Hours Invested:</span>
+                          <span>120</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Projects Built:</span>
+                          <span>3</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Days Streak:</span>
+                          <span>14</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recommended Resources</CardTitle>
+                  <CardDescription>Curated learning materials</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <ResourceItem title="Modern React with Redux" type="Course" link="#" />
+                    <ResourceItem title="JavaScript: The Good Parts" type="Book" link="#" />
+                    <ResourceItem title="CSS Grid & Flexbox for Responsive Layouts" type="Tutorial" link="#" />
+                    <ResourceItem title="Frontend Masters Bootcamp" type="Bootcamp" link="#" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </TabsContent>
 
-        <TabsContent value="fullstack" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Full Stack Developer Roadmap</CardTitle>
-              <CardDescription>Switch to this path to view the detailed roadmap</CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center py-8">
-              <Button asChild>
-                <Link href="/consultation">Get Personalized Full Stack Roadmap</Link>
-              </Button>
-            </CardContent>
-          </Card>
+        <TabsContent value="fullstack" className="mt-6 space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold">Full Stack Developer Roadmap</h2>
+              <p className="text-muted-foreground">Estimated Completion Time: 10-12 months</p>
+            </div>
+            <Button>
+              <Download className="mr-2 h-4 w-4" />
+              Download Roadmap
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-6">
+              <RoadmapStage
+                title="Stage 1: Frontend Development"
+                description="Master the basics of frontend development"
+                progress={75}
+                status="completed"
+                modules={[
+                  { name: "HTML5 Essentials", status: "completed" },
+                  { name: "CSS3 & Responsive Design", status: "completed" },
+                  { name: "JavaScript Fundamentals", status: "completed" },
+                  { name: "Git & GitHub Basics", status: "completed" },
+                ]}
+              />
+
+              <RoadmapStage
+                title="Stage 2: Backend Development"
+                description="Master the basics of backend development"
+                progress={65}
+                status="in-progress"
+                modules={[
+                  { name: "Node.js & Express", status: "completed" },
+                  { name: "Database Basics", status: "in-progress" },
+                  { name: "API Development", status: "completed" },
+                  { name: "Version Control with Git", status: "completed" },
+                ]}
+              />
+
+              <RoadmapStage
+                title="Stage 3: Full Stack Frameworks"
+                description="Master the frameworks that power modern web applications"
+                progress={25}
+                status="not-started"
+                modules={[
+                  { name: "React & Next.js", status: "completed" },
+                  { name: "Node.js & Express", status: "completed" },
+                  { name: "Database Basics", status: "in-progress" },
+                  { name: "API Development", status: "completed" },
+                ]}
+              />
+
+              <RoadmapStage
+                title="Stage 4: Full Stack Frameworks"
+                description="Master the frameworks that power modern web applications"
+                progress={0}
+                status="not-started"
+                modules={[  
+                  { name: "React & Next.js", status: "completed" },
+                  { name: "Node.js & Express", status: "completed" },
+                  { name: "Database Basics", status: "in-progress" },
+                  { name: "API Development", status: "completed" },
+                ]}
+              />
+            </div>
+
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Your Progress</CardTitle>
+                  <CardDescription>Frontend Developer Path</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">Overall Completion</span>
+                        <span className="text-sm text-muted-foreground">41%</span>
+                      </div>
+                      <Progress value={41} className="h-2" />
+                    </div>
+
+                    <div className="pt-4 space-y-2">
+                      <h4 className="font-medium">Statistics</h4>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Modules Completed:</span>
+                          <span>6/16</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Hours Invested:</span>
+                          <span>120</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Projects Built:</span>
+                          <span>3</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Days Streak:</span>
+                          <span>14</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recommended Resources</CardTitle>
+                  <CardDescription>Curated learning materials</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <ResourceItem title="Modern React with Redux" type="Course" link="#" />
+                    <ResourceItem title="JavaScript: The Good Parts" type="Book" link="#" />
+                    <ResourceItem title="CSS Grid & Flexbox for Responsive Layouts" type="Tutorial" link="#" />
+                    <ResourceItem title="Frontend Masters Bootcamp" type="Bootcamp" link="#" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
